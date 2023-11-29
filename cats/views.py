@@ -3,12 +3,17 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Cat, Owner
-from .serializers import CatSerializer, OwnerSerializer
+from .serializers import CatSerializer, CatListSerializer, OwnerSerializer
 
 
 class CatViewSet(viewsets.ModelViewSet):
     queryset = Cat.objects.all()
     serializer_class = CatSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CatListSerializer
+        return CatSerializer
 
     @action(detail=False, url_path='recent-white-cats')
     def recent_white_cats(self, request):
